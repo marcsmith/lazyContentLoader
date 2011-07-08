@@ -65,37 +65,61 @@
   <!-- scripts concatenated and minified via ant build script-->
   <script src="js/plugins.js"></script>
   <script src="js/script.js"></script>
-  <script src="js/mylibs/jquery.lazyContentLoader.js"></script>
+  <script src="http://marc-mbp.nhl.com:8098/js/gc/jquery.tmpl.min.js"></script>
+  <script src="http://marc-mbp.nhl.com:8098/nhl/js/jquery.lazyContentLoader.js"></script>
 
   <!-- setup js goodies -->
   <script>
+	/* setup template to be used in the panels */
+	var PANEL_TEMPLATE	= 'iceEventTemplate',
+		panelTmpl 		= "<span>${body}</span>";
+
+	jQuery.template(PANEL_TEMPLATE, panelTmpl);
+
+	function replacePanel(index, data, wasUserActivated) {
+		if(data) {
+			var panel = jQuery('#carousel ul.content>li').get(index),
+				t = jQuery.tmpl(panelTmpl, data);
+			jQuery(panel).prepend(t);
+		}
+	};
+
+	function writePanels (index, data, wasUserActivated) {
+		if(data) {
+			var panels		= data.caroPanels,
+				i			= panels.length - 1;
+			while(i) {
+				replacePanel(i, panels[i], wasUserActivated);
+				i--;
+			}
+		}
+		if(wasUserActivated) {
+			var curLeft = $('#carousel ul.content').css('left').replace("px", ""),
+				newLeft = -(400*index),
+				moveLeft = newLeft - curLeft;
+			$('#carousel ul.content').animate( { left: '+='+moveLeft } );
+		}
+	};
+	
+	/* /setup tmpl */
+
+
 	/* setup external content URLs */
 	(function() {
-		// this first one is loaded onpage load from server (ideally)...so no need to bind this here
-		//	$("#carousel li:nth-child(1)").data('contentUrl', './ext/caro1.html');
-		$("#carousel li:nth-child(2)").data('contentUrl', './ext/caro2.html');
-		$("#carousel li:nth-child(3)").data('contentUrl', './ext/caro3.html');
-		$("#carousel li:nth-child(4)").data('contentUrl', './ext/caro4.html');
+		// bind to the <ul> of the controls in this example - just 1 external call to get data for ALL panels (sent to callback)
+		$("#carousel ul.controls").data('contentUrl', './ext/caroFull.json');
 	})();
+	/* /setup external URLs */
 
+
+	/* call lazyContentLoader on doc ready */
 	$(document).ready(function() {
 		$('#carousel').lazyContentLoader({
 			triggerAction: 'click',
-			callback: iLikeTurtles,
+			callback: writePanels,
 			placeholder: '<div style="margin: 50% 0 0 50%"><img src="./images/loading.gif" alt="loading..." /></div>'
 		});
 	});
-
-	function iLikeTurtles(index, data) {
-		if(data) {
-			$('#carousel ul.content>li').eq(index).html(data);
-			$('#message').html( $('#message').html() + 'loaded remote content at index ' + index + '<br />' );
-		}
-		var curLeft = $('#carousel ul').css('left').replace("px", ""),
-			newLeft = -(400*index),
-			moveLeft = newLeft - curLeft;
-		$('#carousel ul').animate( { left: '+='+moveLeft } );
-	}
 
   </script>
   <!-- end scripts-->
