@@ -38,7 +38,7 @@
 
 		<div id="carousel" class="externalContentGroup">
 			<ul class="content">
-				<li class="active">this is some shizzle for caro 1.<br />(generated on server, yo)</li>
+				<li class="active">this is some content for caro 1.<br />(generated on server, yo)</li>
 				<li></li>
 				<li></li>
 			</ul>
@@ -89,7 +89,7 @@
 	function iLikeTurtles(index, data) {
 		if(data) {
 			$('#carousel ul.content>li').eq(index).html(data);
-			$('#message').html( $('#message').html() + 'loaded remote content at index ' + index + '<br />' );
+			$('#message').html( $('#message').html() + 'loaded remote content for panel ' + (index+1) + '<br />' );
 		}
 		var curLeft = $('#carousel ul').css('left').replace("px", ""),
 			newLeft = -(400*index),
