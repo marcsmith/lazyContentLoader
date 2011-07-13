@@ -1,0 +1,16 @@
+{
+    "caroPanels": [
+    	{
+    		"body": "external JSON content for caro panel 1"
+    	},
+    	{
+    		"body": "external JSON content for caro panel 2"
+    	},
+    	{
+    		"body": "external JSON content for caro panel 3"
+    	},
+    	{
+    		"body": "external JSON content for caro panel 4"
+    	}
+	]
+}
